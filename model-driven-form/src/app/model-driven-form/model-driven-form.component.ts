@@ -63,13 +63,13 @@ export class ModelDrivenFormComponent implements OnInit {
 
     // synchronous genders
     this.genderData = this.getGenders();
-    this.registerForm.controls.orders.patchValue(this.genderData[0].name)
+    this.registerForm.controls.gender.patchValue(this.genderData[0].name)
 
     // asynchronous genders
-    of(this.getGenders()).subscribe(genders => {
-      this.genderData = genders;
-      this.registerForm.controls.orders.patchValue(this.genderData[0].name);
-    });
+    // of(this.getGenders()).subscribe(genders => {
+    //   this.genderData = genders;
+    //   this.registerForm.controls.gender.patchValue(this.genderData[0].name);
+    // });
   }
 
   getSkills() {
