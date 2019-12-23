@@ -1,0 +1,83 @@
+<div class="container">
+
+    <div class="jumbotron">
+
+        <h4 class="text-primary text-center">Angular 8 dynamic form with validation</h4>
+        <form [formGroup]="form" (submit)="submitForm()">
+
+            <ng-template ngFor let-input [ngForOf]="mockData">
+
+                <ng-container [ngSwitch]="input.controlType">
+
+                    <!-- handling text type inputs -->
+                    <ng-template [ngSwitchCase]="'text'">
+                        <div class="form-group">
+
+                            <label [for]="input.controlName"> {{input.controlName}}</label>
+                            <input [formControlName]="input.controlName" class="form-control" [type]="input.valueType"
+                                [name]="input.controlName" [required]="input.validators.required"
+                                [forbiddenName]="input.validators.forbiddenName"
+                                [minlength]="input.validators.minlength" [maxlength]="input.validators.maxlength" />
+
+                            <div class="text-danger"
+                                *ngIf="form.get(input.controlName).invalid && 
+                                                      (form.get(input.controlName).dirty || form.get(input.controlName).touched)">
+                                <small *ngIf="form.get(input.controlName).errors.required">{{input.controlName}} required</small>
+                                <small
+                                    *ngIf="form.get(input.controlName).errors.forbiddenName">{{form.get(input.controlName).errors.forbiddenName.value}}
+                                    not allowed
+                                </small>
+                                <small *ngIf="form.get(input.controlName).errors.minlength">Minimum length is
+                                    {{input.validators.minlength}}
+                                </small>
+
+                            </div>
+
+                        </div>
+                    </ng-template>
+
+                    <!-- handling select & radio type inputs -->
+
+                    <ng-template [ngSwitchCase]="'select'">
+                        <div class="form-group">
+
+                            <label [for]="input.controlName"> {{input.controlName}}</label>
+                            <select [formControlName]="input.controlName" class="form-control"
+                                [name]="input.controlName" [id]="input.controlName"
+                                [required]="input.validators.required">
+                                <option value="">{{input.placeholder}}</option>
+                                <option *ngFor="let option of input.options" [value]="option.value">
+                                    {{option.optionName}}</option>
+                            </select>
+                            <div class="error" *ngIf="form.get(input.controlName).invalid && 
+                              (form.get(input.controlName).dirty || form.get(input.controlName).touched)">
+                                <small *ngIf="form.get(input.controlName).errors?.required"
+                                    class="text-danger">{{input.controlName}} value
+                                    is required</small>
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <div class="container">
+                        <ng-template [ngSwitchCase]="'radio'">
+                            <div class="form-group">
+
+                                <div *ngFor="let option of input.options" class="form-group row">
+                                    <input [formControlName]="input.controlName" [id]="option.optionName"
+                                        class="form-check-input" [type]="input.controlType" [name]="input.controlName"
+                                        [value]="option.value" [required]="input.validators.required">
+                                    <label [for]="option.optionName" class="form-check-label">
+                                        {{option.optionName}}</label>
+                                </div>
+                            </div>
+
+                        </ng-template>
+                    </div>
+
+                </ng-container>
+            </ng-template>
+
+        </form>
+    </div>
+
+</div>
